@@ -81,7 +81,7 @@ export default function Profile() {
             <div className="flex flex-row items-center justify-center">
               <Link
                 className="flex justify-center mx-5 rounded-md bg-blue-500 hover:bg-blue-400 max-w-sm w-full py-3 px-5 mb-5 text-sm font-semibold text-white outline-none"
-                href={`/edit/${profileEmployee?._id}`}
+                href={`/employee/edit/${profileEmployee?._id}`}
               >
                 Edit
               </Link>
