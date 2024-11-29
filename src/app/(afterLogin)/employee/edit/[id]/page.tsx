@@ -19,6 +19,7 @@ export default function Edit() {
     city: "Lake Lydaborough",
     country: "Japan",
     role: "orchestrate virtual mindshare",
+    admin: false,
     comments: [],
   };
   // will change to function

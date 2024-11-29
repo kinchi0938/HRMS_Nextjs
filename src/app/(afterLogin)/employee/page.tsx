@@ -1,16 +1,14 @@
 "use client";
 
 // import { IEmployee } from "@/app/types/employee.type";
-// import { IUser } from "@/app/types/user.type";
 // import { useState } from "react";
 import { mockDatabase } from "@/app/db";
 import Link from "next/link";
 
 export default function EmployeeList() {
-  //   const [users, setUsers] = useState<Array<IUser>>([]);
   //   const [employees, setEmployees] = useState<Array<IEmployee>>([]);
-
   //   const getAllEmployee = [];
+
   const handleCSV = () => {};
 
   return (

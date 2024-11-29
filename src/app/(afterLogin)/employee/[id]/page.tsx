@@ -20,6 +20,7 @@ export default function Profile() {
     city: "Lake Lydaborough",
     country: "Japan",
     role: "orchestrate virtual mindshare",
+    admin: false,
     comments: [],
   };
   // will change to function
@@ -60,6 +61,7 @@ export default function Profile() {
               <div className="grid grid-rows-6 col-span-3">
                 {profileEmployee ? (
                   <>
+                    <div className="truncate">{profileEmployee?.username}</div>
                     <div className="truncate">
                       {profileEmployee?.firstName} {profileEmployee?.lastName}
                     </div>
