@@ -17,6 +17,7 @@ function generateMockUsers(count: number): IEmployee[] {
       city: faker.location.city(),
       country: faker.location.country(),
       role: faker.company.buzzPhrase(),
+      comments: [],
     });
   }
   return employee;

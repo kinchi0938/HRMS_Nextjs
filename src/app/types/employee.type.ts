@@ -1,3 +1,5 @@
+import { IComment } from "./comment.type";
+
 export interface IEmployee {
   _id?: string;
   firstName: string;
@@ -9,4 +11,5 @@ export interface IEmployee {
   city: string;
   country: string;
   role: string;
+  comments: Array<IComment>;
 }
