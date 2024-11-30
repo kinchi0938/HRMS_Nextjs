@@ -1,13 +1,23 @@
 "use client";
 
-// import { IEmployee } from "@/app/types/employee.type";
-// import { useState } from "react";
-import { mockDatabase } from "@/app/db";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { IEmployee } from "@/app/types/employee.type";
+
+async function fetchEmployees() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/employee`);
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+}
 
 export default function EmployeeList() {
-  //   const [employees, setEmployees] = useState<Array<IEmployee>>([]);
-  //   const getAllEmployee = [];
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["employeeList"],
+    queryFn: () => fetchEmployees(),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   const handleCSV = () => {};
 
@@ -25,7 +35,7 @@ export default function EmployeeList() {
         </button>
       </div>
       <ul className="">
-        {mockDatabase.employees.map((employee) => {
+        {data?.map((employee: IEmployee) => {
           return (
             <li key={employee._id} className="mx-10 my-2">
               <div className="flex flex-col md:grid md:grid-cols-4 md:max-w-full p-5 rounded-xl bg-white p-4 shadow-lg">
