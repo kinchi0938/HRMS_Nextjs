@@ -14,8 +14,17 @@ export const authApi = {
     if (response.token) {
       localStorage.setItem("accessToken", response.token);
       // 필요한 경우 사용자 정보도 저장
-      localStorage.setItem("username", JSON.stringify(response.username));
+      localStorage.setItem("user", JSON.stringify(response.user));
     }
     return response;
+  },
+  logout: async () => {
+    try {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.error("Logout error:", error);
+      throw error;
+    }
   },
 };

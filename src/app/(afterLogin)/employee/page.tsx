@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { employeeApi } from "@/lib/api/employee/employee.api";
 import { IEmployee } from "@/lib/api/employee/employee.types";

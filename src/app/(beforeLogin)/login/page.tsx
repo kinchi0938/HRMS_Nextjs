@@ -1,22 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { authApi } from "@/lib/api/auth/auth.api";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { setCredentials } from "@/store/features/authSlice";
 
 export default function Login() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const isAuthenticated = useSelector(
+    (state: { auth: { isAuthenticated: boolean } }) =>
+      state.auth.isAuthenticated
+  );
 
   const loginMutation = useMutation({
     mutationFn: (credentials: { username: string; password: string }) =>
       authApi.login(credentials),
     onSuccess: (data) => {
-      console.log("Login successful:", data);
+      dispatch(
+        setCredentials({
+          user: data.user,
+          token: data.token,
+        })
+      );
       router.push("/employee");
     },
     onError: (error: any) => {
