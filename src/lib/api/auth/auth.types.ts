@@ -12,3 +12,8 @@ export interface SignupRequest {
   country: string;
   role: string;
 }
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
