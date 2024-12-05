@@ -8,7 +8,7 @@ interface ApiError {
 
 const getAuthHeaders = (): HeadersInit => {
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
 
   return {
     "Content-Type": "application/json",
@@ -41,7 +41,10 @@ export const createApiClient = () => {
         const response = await fetch(`${BASE_URL}${endpoint}`, {
           method: "GET",
           headers: getAuthHeaders(),
-          credentials: "include",
+          // credentials: "include",
+          credentials: "same-origin",
+          mode: "cors",
+          cache: "no-store", // Next.js 캐시 비활성화
         });
         return handleResponse<T>(response);
       } catch (error) {
@@ -70,7 +73,9 @@ export const createApiClient = () => {
         const response = await fetch(`${BASE_URL}${endpoint}`, {
           method: "PUT",
           headers: getAuthHeaders(),
-          credentials: "include",
+          // credentials: "include",
+          credentials: "same-origin",
+          mode: "cors",
           body: data ? JSON.stringify(data) : undefined,
         });
         return handleResponse<T>(response);
@@ -84,7 +89,9 @@ export const createApiClient = () => {
         const response = await fetch(`${BASE_URL}${endpoint}`, {
           method: "DELETE",
           headers: getAuthHeaders(),
-          credentials: "include",
+          // credentials: "include",
+          credentials: "same-origin",
+          mode: "cors",
         });
         return handleResponse<T>(response);
       } catch (error) {
