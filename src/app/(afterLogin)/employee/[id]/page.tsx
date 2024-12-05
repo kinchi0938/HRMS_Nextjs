@@ -23,6 +23,7 @@ export default function Profile() {
     admin: false,
     comments: [],
   };
+
   // will change to function
 
   const [profileEmployee, setProfileEmployee] = useState<IEmployee | null>(
