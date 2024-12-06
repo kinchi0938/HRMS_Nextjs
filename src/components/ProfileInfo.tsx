@@ -1,13 +1,13 @@
 import { IEmployee } from "@/types/employee.type";
 
 interface ProfileInfoProps {
-  user: IEmployee;
+  employee: IEmployee;
   onEdit: () => void;
   onDelete: () => void;
 }
 
 export default function ProfileInfo({
-  user,
+  employee,
   onEdit,
   onDelete,
 }: ProfileInfoProps) {
@@ -16,25 +16,23 @@ export default function ProfileInfo({
       <div className="flex flex-col">
         <div className="grid grid-cols-4 p-5">
           <div className="grid grid-rows-6 mr-5 min-w-min">
-            <div className="text-sm font-bold">User Name</div>
             <div className="text-sm font-bold">Full Name</div>
             <div className="text-sm font-bold">Email</div>
             <div className="text-sm font-bold row-span-2">Address</div>
             <div className="text-sm font-bold">Role</div>
           </div>
           <div className="grid grid-rows-6 col-span-3">
-            <div className="truncate">{user.username}</div>
             <div className="truncate">
-              {user.firstName} {user.lastName}
+              {employee.firstName} {employee.lastName}
             </div>
-            <div className="truncate">{user.email}</div>
+            <div className="truncate">{employee.email}</div>
             <div className="truncate">
-              {user.housenumber}, {user.street}
+              {employee.housenumber}, {employee.street}
             </div>
             <div className="truncate">
-              {user.zipcode}, {user.city}, {user.country}
+              {employee.zipcode}, {employee.city}, {employee.country}
             </div>
-            <div className="truncate">{user.role}</div>
+            <div className="truncate">{employee.role}</div>
           </div>
         </div>
         <div className="flex flex-row items-center justify-center">

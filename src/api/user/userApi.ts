@@ -13,6 +13,7 @@ interface ApiResponse<T> {
   message?: string;
   status: number;
 }
+
 const api = createApiClient();
 
 export const userApi = {

@@ -1,12 +1,17 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { checkAuth } from "@/store/features/authSlice";
 
 export const useAuth = () => {
-  const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const { isAuthenticated, token, user } = useSelector(
+    (state: RootState) => state.auth
+  );
 
-  return {
-    user: auth.user,
-    token: auth.token,
-    isAuthenticated: auth.isAuthenticated,
-  };
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  return { isAuthenticated, token, user };
 };

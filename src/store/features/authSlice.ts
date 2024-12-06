@@ -1,4 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  removeLocalStorage,
+} from "../../utils/localStorage";
 
 export interface User {
   id: string;
@@ -12,10 +17,9 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
+  token: getLocalStorage("accessToken"),
+  isAuthenticated: !!getLocalStorage("accessToken"), // 토큰 존재 여부로 초기값 설정
   user: null,
-  token:
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null,
-  isAuthenticated: false,
 };
 
 const authSlice = createSlice({
@@ -30,16 +34,25 @@ const authSlice = createSlice({
       state.user = user;
       state.token = token;
       state.isAuthenticated = true;
-      localStorage.setItem("accessToken", token);
+      setLocalStorage("accessToken", token);
+      setLocalStorage("user", JSON.stringify(user));
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("accessToken");
+      removeLocalStorage("accessToken");
+      removeLocalStorage("user");
+    },
+    checkAuth: (state) => {
+      const token = getLocalStorage("accessToken");
+      const user = JSON.parse(getLocalStorage("user") || "null");
+      state.isAuthenticated = !!token;
+      state.user = user;
+      state.token = token;
     },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, checkAuth } = authSlice.actions;
 export default authSlice.reducer;
