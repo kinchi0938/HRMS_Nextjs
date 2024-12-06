@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
-import { employeeApi } from "@/lib/api/employee/employee.api";
-import { IEmployee } from "@/lib/api/employee/employee.types";
-import { useEffect } from "react";
+import { employeeApi } from "@/api/employee/employee.api";
+import { IEmployee } from "@/types/employee.type";
 
 export default function HomePage() {
   // Employee data fetching with React Query
@@ -18,12 +16,6 @@ export default function HomePage() {
     queryFn: employeeApi.getEmployeeList,
     refetchOnMount: true,
   });
-
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["employees"] });
-  }, [queryClient]);
 
   const handleCSV = () => {
     const objectToCsv = (data: Array<IEmployee>) => {

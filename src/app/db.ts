@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { IEmployee } from "./types/employee.type";
+import { IEmployee } from "../types/employee.type";
 
 function generateMockUsers(count: number): IEmployee[] {
   const employee = [];

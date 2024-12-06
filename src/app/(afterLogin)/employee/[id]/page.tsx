@@ -1,7 +1,7 @@
 "use client";
 
-import { IComment } from "@/app/types/comment.type";
-import { IEmployee } from "@/app/types/employee.type";
+import { IComment } from "@/types/comment.type";
+import { IEmployee } from "@/types/employee.type";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

@@ -3,7 +3,7 @@ import type {
   LoginRequest,
   LoginResponse,
   SignupRequest,
-} from "@/lib/api/auth/auth.types";
+} from "@/types/auth.type";
 
 const api = createApiClient();
 

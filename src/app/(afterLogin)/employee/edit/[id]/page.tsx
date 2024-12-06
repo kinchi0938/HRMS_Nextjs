@@ -1,6 +1,6 @@
 "use client";
 
-import { IEmployee } from "@/app/types/employee.type";
+import { IEmployee } from "@/types/employee.type";
 import ValidateEmail from "@/utils/emailValidation";
 import { useEffect, useRef, useState } from "react";
 

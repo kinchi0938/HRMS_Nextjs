@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { authApi } from "@/lib/api/auth/auth.api";
+import { authApi } from "@/api/auth/auth.api";
 import { logout } from "@/store/features/authSlice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";

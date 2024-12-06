@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { authApi } from "@/lib/api/auth/auth.api";
+import { authApi } from "@/api/auth/auth.api";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/store/features/authSlice";

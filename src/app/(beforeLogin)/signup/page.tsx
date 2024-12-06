@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ValidateEmail from "@/utils/emailValidation";
-import { SignupRequest } from "@/lib/api/auth/auth.types";
+import { SignupRequest } from "@/types/auth.type";
 import { useMutation } from "@tanstack/react-query";
-import { authApi } from "@/lib/api/auth/auth.api";
+import { authApi } from "@/api/auth/auth.api";
 
 export default function Signup() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { createApiClient } from "../base";
-import { IEmployee } from "@/lib/api/employee/employee.types";
+import { IEmployee } from "@/types/employee.type";
 
 const api = createApiClient();
 
