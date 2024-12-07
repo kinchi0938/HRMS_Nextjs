@@ -25,3 +25,18 @@ export const useUpdateEmployeeMutation = (id: string) => {
     },
   });
 };
+export const useDeleteEmployeeMutation = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => employeeApi.deleteEmployee(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["employee", id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["employees"],
+      });
+    },
+  });
+};

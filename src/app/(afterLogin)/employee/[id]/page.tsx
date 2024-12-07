@@ -4,7 +4,10 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ProfileInfo from "@/components/ProfileInfo";
-import { useEmployee } from "@/hooks/useEmployeeQuery";
+import {
+  useDeleteEmployeeMutation,
+  useEmployee,
+} from "@/hooks/useEmployeeQuery";
 import CommentSection from "@/components/CommentSection";
 import { useCreateCommentMutation } from "@/hooks/useCreateCommentMutation";
 import { useAuth } from "@/hooks/useAuth";
@@ -15,7 +18,6 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { data: employee, isLoading, isError, error } = useEmployee(id!);
-  const handleDelete = async () => {};
 
   const createCommentMutation = useCreateCommentMutation();
 
@@ -26,6 +28,16 @@ export default function ProfilePage() {
       author: user!.username,
     });
     router.refresh();
+  };
+
+  const deleteMutation = useDeleteEmployeeMutation(id);
+  const handleDelete = async () => {
+    try {
+      await deleteMutation.mutateAsync();
+      router.push("/employee");
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+    }
   };
 
   if (isLoading) {
@@ -62,6 +74,7 @@ export default function ProfilePage() {
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         onConfirm={handleDelete}
+        isPending={deleteMutation.isPending}
       />
     </div>
   );
