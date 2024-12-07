@@ -25,7 +25,7 @@ export default function DeleteConfirmModal({
             onClick={onClose}
             disabled={isPending}
           >
-            No, I don't want to Delete
+            No, I do not want to Delete
           </button>
           <button
             className="mx-5 rounded-md bg-red-500 hover:bg-red-400 max-w-sm w-full py-3 px-5 mb-5 text-sm font-semibold text-white outline-none"

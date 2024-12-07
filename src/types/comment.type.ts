@@ -10,9 +10,3 @@ export interface CommentDTO {
   text: string;
   author: string;
 }
-
-interface ApiResponse<T> {
-  data: T;
-  message?: string;
-  status: number;
-}

@@ -56,6 +56,7 @@ export default function Edit() {
       router.push(`/employee/${id}`);
     } catch (error) {
       setErrorMessage("Failed to update employee");
+      return error;
     }
   };
 

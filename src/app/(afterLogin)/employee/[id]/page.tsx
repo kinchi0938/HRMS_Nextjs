@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const { user } = useAuth();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { data: employee, isLoading, isError, error } = useEmployee(id!);
+  const { data: employee, isLoading, isError } = useEmployee(id!);
 
   const createCommentMutation = useCreateCommentMutation();
 

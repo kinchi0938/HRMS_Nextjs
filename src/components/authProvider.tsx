@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       dispatch(setCredentials({ user, token }));
     }
     setMounted(true);
-  }, []);
+  }, [dispatch]);
 
   return mounted ? children : null;
 }
