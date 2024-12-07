@@ -1,9 +1,5 @@
 import { createApiClient } from "../base";
-import type {
-  LoginRequest,
-  LoginResponse,
-  SignupRequest,
-} from "@/types/auth.type";
+import type { LoginResponse, SignupRequest } from "@/types/auth.type";
 
 const api = createApiClient();
 

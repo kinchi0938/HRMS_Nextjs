@@ -1,11 +1,6 @@
+import { ApiResponse } from "@/types/api.type";
 import { createApiClient } from "../base";
-import { IEmployee } from "@/types/employee.type";
-
-interface ApiResponse<T> {
-  data: T;
-  message?: string;
-  status: number;
-}
+import { IEmployee, IEmployeeDTO } from "@/types/employee.type";
 
 const api = createApiClient();
 
@@ -18,7 +13,10 @@ export const employeeApi = {
     const response = await api.get<IEmployee>(`/employee/${id}`);
     return response;
   },
-  // Delete Employee
+  updateEmployee: async (id: string, data: IEmployeeDTO) => {
+    const response = await api.put<IEmployeeDTO>(`/employee/edit/${id}`, data);
+    return response;
+  },
   deleteEmployee: async (empolyeeId: string): Promise<ApiResponse<void>> => {
     const response = await api.delete<ApiResponse<void>>(
       `/employee/${empolyeeId}`

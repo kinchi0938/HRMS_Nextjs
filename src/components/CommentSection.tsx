@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IComment } from "@/types/comment.type";
 
 interface CommentSectionProps {
-  comments: IComment[];
+  comments: IComment[] | undefined;
   onSubmitComment: (text: string) => void;
   isSubmitting: boolean;
 }

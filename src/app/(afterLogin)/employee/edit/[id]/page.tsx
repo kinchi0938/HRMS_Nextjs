@@ -1,82 +1,92 @@
 "use client";
 
-import { IEmployee } from "@/types/employee.type";
+import {
+  useEmployee,
+  useUpdateEmployeeMutation,
+} from "@/hooks/useEmployeeQuery";
 import ValidateEmail from "@/utils/emailValidation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function Edit() {
-  //get Employee for Current Profile
-  const getThisEmployee = {
-    _id: "5",
-    username: "Garrick55",
-    password: "5mxufFCJZoVoAvC",
-    firstName: "Darby",
-    lastName: "Konopelski",
-    email: "Jordane.Stokes56@gmail.com",
-    street: "Ellis Common",
-    housenumber: "83471",
-    zipcode: 58313,
-    city: "Lake Lydaborough",
-    country: "Japan",
-    role: "orchestrate virtual mindshare",
-    admin: false,
-    comments: [],
-  };
-  // will change to function
+  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const { data: employee, isLoading } = useEmployee(id);
 
-  const [thisEmployee, setThisEmployee] = useState<
-    IEmployee | null | undefined
-  >(getThisEmployee);
-  const [username, setUsername] = useState(thisEmployee?.username);
-  const [email, setEmail] = useState(thisEmployee?.email);
-  const [firstName, setFirstName] = useState(thisEmployee?.firstName);
-  const [lastName, setLastName] = useState(thisEmployee?.lastName);
-  const [street, setStreet] = useState(thisEmployee?.street);
-  const [housenumber, setHousenumber] = useState(thisEmployee?.housenumber);
-  const [zipcode, setZipcode] = useState(thisEmployee?.zipcode);
-  const [city, setCity] = useState(thisEmployee?.city);
-  const [country, setCountry] = useState(thisEmployee?.country);
-  const [role, setRole] = useState(thisEmployee?.role);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    street: "",
+    housenumber: "",
+    zipcode: 0,
+    city: "",
+    country: "",
+    role: "",
+  });
+
   const [errorMessage, setErrorMessage] = useState("");
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(
+    employee ? ValidateEmail(employee.email) : true
+  );
   const [isFocus, setIsFocus] = useState(false);
-  const ref = useRef(null);
+  const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setUsername(thisEmployee?.username);
-    setEmail(thisEmployee?.email);
-    setFirstName(thisEmployee?.firstName);
-    setLastName(thisEmployee?.lastName);
-    setStreet(thisEmployee?.street);
-    setHousenumber(thisEmployee?.housenumber);
-    setZipcode(thisEmployee?.zipcode);
-    setCity(thisEmployee?.city);
-    setCountry(thisEmployee?.country);
-    setRole(thisEmployee?.role);
-  }, [thisEmployee]);
+    if (employee) {
+      setFormData(employee);
+    }
+  }, [employee]);
 
-  //Edit this User
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  useEffect(() => {
+    setIsEmailValid(ValidateEmail(formData.email));
+  }, [formData.email]);
+
+  const updateEmployeeMutation = useUpdateEmployeeMutation(id);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isEmailValid) {
+      setErrorMessage("Please enter a valid email");
+      return;
+    }
+    try {
+      updateEmployeeMutation.mutate(formData);
+      router.push(`/employee/${id}`);
+    } catch (error) {
+      setErrorMessage("Failed to update employee");
+    }
   };
 
-  //validate Email
   useEffect(() => {
-    if (document.activeElement === ref.current) {
-      if (email) {
-        const validEmail = ValidateEmail(email);
-        setIsEmailValid(validEmail);
+    if (document.activeElement === emailRef.current) {
+      if (formData.email) {
+        setIsEmailValid(ValidateEmail(formData.email));
         setIsFocus(true);
       }
     } else {
       setIsFocus(false);
     }
-  }, [email, isFocus]);
+  }, [formData.email, isFocus]);
+
+  // 폼 입력 핸들러
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "zipcode" ? Number(value) : value,
+    }));
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex items-center justify-center p-12">
       <div className="mx-auto w-full max-w-[550px]">
-        {errorMessage ? (
+        {errorMessage && (
           <div
             className="mb-3 bg-red-100 border-t border-b border-red-500 text-red-700 px-4 py-3"
             role="alert"
@@ -84,13 +94,10 @@ export default function Edit() {
             <p className="font-bold">Error : please try again!</p>
             <p className="text-sm">{errorMessage}</p>
           </div>
-        ) : (
-          <></>
         )}
         <form onSubmit={handleSubmit}>
           <h3 className="max-w-full truncate mb-8 block text-2xl font-medium text-[#07074D]">
-            Edit Employee&nbsp;:&nbsp;{thisEmployee?.firstName}&nbsp;
-            {thisEmployee?.lastName}
+            Edit Employee: {employee?.firstName} {employee?.lastName}
           </h3>
 
           <label
@@ -107,10 +114,8 @@ export default function Edit() {
             className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
             type="text"
             name="username"
-            value={username}
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
-              setUsername(e.currentTarget.value)
-            }
+            value={formData.username}
+            onChange={handleInputChange}
           />
           <br></br>
           <label
@@ -122,14 +127,12 @@ export default function Edit() {
           {!isEmailValid && isFocus ? (
             <>
               <input
-                ref={ref}
+                ref={emailRef}
                 className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-red-500 focus:shadow-md"
                 type="email"
                 name="email"
-                value={email}
-                onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                  setEmail(e.currentTarget.value)
-                }
+                value={formData.email}
+                onChange={handleInputChange}
               />
               <div
                 className="mb-3 bg-red-100 border-t border-b border-red-500 text-red-700 px-4 py-3"
@@ -142,14 +145,12 @@ export default function Edit() {
           ) : (
             <>
               <input
-                ref={ref}
+                ref={emailRef}
                 className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
                 type="email"
                 name="email"
-                value={email}
-                onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                  setEmail(e.currentTarget.value)
-                }
+                value={formData.email}
+                onChange={handleInputChange}
               />
             </>
           )}
@@ -164,10 +165,8 @@ export default function Edit() {
             className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
             type="text"
             name="firstName"
-            value={firstName}
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
-              setFirstName(e.currentTarget.value)
-            }
+            value={formData.firstName}
+            onChange={handleInputChange}
           />
           <br></br>
           <label
@@ -180,10 +179,8 @@ export default function Edit() {
             className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
             type="text"
             name="lastName"
-            value={lastName}
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
-              setLastName(e.currentTarget.value)
-            }
+            value={formData.lastName}
+            onChange={handleInputChange}
           />
           <br></br>
           <div>
@@ -202,10 +199,8 @@ export default function Edit() {
                   className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-1 px-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
                   type="text"
                   name="street"
-                  value={street}
-                  onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                    setStreet(e.currentTarget.value)
-                  }
+                  value={formData.street}
+                  onChange={handleInputChange}
                 />
                 <br></br>
               </div>
@@ -220,10 +215,8 @@ export default function Edit() {
                   className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-1 px-3  text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
                   type="text"
                   name="housenumber"
-                  value={housenumber}
-                  onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                    setHousenumber(e.currentTarget.value)
-                  }
+                  value={formData.housenumber}
+                  onChange={handleInputChange}
                 />
                 <br></br>
               </div>
@@ -240,10 +233,8 @@ export default function Edit() {
                   className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-1 px-3 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
                   type="number"
                   name="zipcode"
-                  value={zipcode}
-                  onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                    setZipcode(parseInt(e.currentTarget.value))
-                  }
+                  value={formData.zipcode}
+                  onChange={handleInputChange}
                 />
                 <br></br>
               </div>
@@ -258,10 +249,8 @@ export default function Edit() {
                   className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-1 px-3  text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
                   type="text"
                   name="city"
-                  value={city}
-                  onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                    setCity(e.currentTarget.value)
-                  }
+                  value={formData.city}
+                  onChange={handleInputChange}
                 />
                 <br></br>
               </div>
@@ -276,10 +265,8 @@ export default function Edit() {
               className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-1 px-3  text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
               type="text"
               name="country"
-              value={country}
-              onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                setCountry(e.currentTarget.value)
-              }
+              value={formData.country}
+              onChange={handleInputChange}
             />
           </div>
           <label
@@ -292,10 +279,8 @@ export default function Edit() {
             className="w-full mb-5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#60a5fa] focus:shadow-md"
             type="text"
             name="role"
-            value={role}
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
-              setRole(e.currentTarget.value)
-            }
+            value={formData.role}
+            onChange={handleInputChange}
           />
           <br></br>
           <h3 className="mb-8 block text-base font-medium text-gray-500">

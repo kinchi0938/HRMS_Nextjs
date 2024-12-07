@@ -1,35 +1,32 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import {
-  useUserProfile,
-  useDeleteUser,
-  useCreateComment,
-} from "@/hooks/useUserQuery";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ProfileInfo from "@/components/ProfileInfo";
-import CommentSection from "@/components/CommentSection";
-import { authApi } from "@/api/auth/auth.api";
-import { useQuery } from "@tanstack/react-query";
-import { employeeApi } from "@/api/employee/employee.api";
 import { useEmployee } from "@/hooks/useEmployeeQuery";
+import CommentSection from "@/components/CommentSection";
+import { useCreateCommentMutation } from "@/hooks/useCreateCommentMutation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ProfilePage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const { user } = useAuth();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { data: user, isLoading: isUserLoading } = useUserProfile(id as string);
-  const deleteUserMutation = useDeleteUser();
-  const createCommentMutation = useCreateComment(id as string);
-
   const { data: employee, isLoading, isError, error } = useEmployee(id!);
-
   const handleDelete = async () => {};
 
-  const handleCommentSubmit = async (text: string) => {};
+  const createCommentMutation = useCreateCommentMutation();
+
+  const handleCommentSubmit = (text: string) => {
+    createCommentMutation.mutate({
+      text,
+      username: employee!.username,
+      author: user!.username,
+    });
+    router.refresh();
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -48,18 +45,18 @@ export default function ProfilePage() {
       {employee ? (
         <ProfileInfo
           employee={employee}
-          onEdit={() => router.push(`/edit/${id}`)}
+          onEdit={() => router.push(`/employee/edit/${id}`)}
           onDelete={() => setShowDeleteModal(true)}
         />
       ) : (
         <></>
       )}
-      {/* 
+
       <CommentSection
-        comments={user.comments}
+        comments={employee?.comments}
         onSubmitComment={handleCommentSubmit}
         isSubmitting={createCommentMutation.isPending}
-      /> */}
+      />
 
       <DeleteConfirmModal
         isOpen={showDeleteModal}

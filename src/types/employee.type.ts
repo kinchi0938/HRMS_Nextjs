@@ -15,3 +15,16 @@ export interface IEmployee {
   admin: boolean;
   comments: Array<IComment>;
 }
+
+export interface IEmployeeDTO {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  street: string;
+  housenumber: string;
+  zipcode: number;
+  city: string;
+  country: string;
+  role: string;
+}
