@@ -5,6 +5,9 @@ import Providers from "@/app/providers";
 export const metadata: Metadata = {
   title: "HR Manage System with Nextjs",
   description: "Make your HR Managing easier",
+  icons: {
+    icon: "hr.svg",
+  },
 };
 
 export default function RootLayout({
