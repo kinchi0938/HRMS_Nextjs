@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/(afterLogin)/employee/add/page": "app/(afterLogin)/employee/add/page.js",
+  "/(afterLogin)/employee/[id]/page": "app/(afterLogin)/employee/[id]/page.js",
+  "/(beforeLogin)/login/page": "app/(beforeLogin)/login/page.js",
+  "/(beforeLogin)/signup/page": "app/(beforeLogin)/signup/page.js",
+  "/(afterLogin)/employee/edit/[id]/page": "app/(afterLogin)/employee/edit/[id]/page.js",
+  "/(afterLogin)/user/[id]/page": "app/(afterLogin)/user/[id]/page.js",
+  "/(afterLogin)/employee/page": "app/(afterLogin)/employee/page.js"
+}

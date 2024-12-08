@@ -7,7 +7,7 @@ export const useEmployee = (id: string) => {
     queryKey: ["employee", id],
     queryFn: () => employeeApi.getEmployee(id),
     enabled: !!id, // id가 있을 때만 쿼리 실행
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });
 };
 export const useUpdateEmployeeMutation = (id: string) => {
